@@ -17,6 +17,16 @@ function doneTodo(condition, index){
     render();
 }
 
+function editTodo(index){
+    const realIdx = todos.findIndex(todo => todo.id === index);
+    const newTitle = prompt("Edit the Todo : " , todos[realIdx].title);
+
+    if(newTitle){
+        todos[realIdx].title = newTitle
+        render()
+    }
+}
+
 function todocompt(todo){
     const todoEl = document.createElement("div")
     const heading = document.createElement("h2")
@@ -37,14 +47,18 @@ function todocompt(todo){
         delTodo(deli);
     })
     donebtn.checked = todo.isDone
+    donebtn.addEventListener("change",(event)=>{
+        let doni = todo.id
+        doneTodo(event.target.checked, doni);
+    })
     if(todo.isDone){
         heading.setAttribute("class","donee")
     }else{
         heading.setAttribute("class","cont")
     }
-    donebtn.addEventListener("change",(event)=>{
+    editbtn.addEventListener("click", ()=>{
         let doni = todo.id
-        doneTodo(event.target.checked, doni);
+        editTodo(doni)
     })
     todoEl.appendChild(donebtn)
     todoEl.appendChild(heading)
@@ -64,12 +78,14 @@ function render() {
 
 
 function todoSave(){
-    todos.push({
-        title : document.querySelector("#inp").value,
-        id : a,
-        isDone : false
-    })
-    a++;
-    document.querySelector("#inp").value = "";
-    render()
+    if(document.getElementById("inp").value){
+            todos.push({
+            title : document.querySelector("#inp").value,
+            id : a,
+            isDone : false
+        })
+        a++;
+        document.querySelector("#inp").value = "";
+        render()
+    }
 }
